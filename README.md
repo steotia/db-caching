@@ -11,3 +11,8 @@ cd docker/mysql/
 docker build -t "db-mysql:dockerfile" .
 docker run -d --volumes-from mysql-bin -p 3306:3306 --name my-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw db-mysql:dockerfile
 ```
+
+## Start Kafka container
+```shell
+docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 spotify/kafka
+```
