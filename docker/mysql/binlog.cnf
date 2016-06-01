@@ -1,0 +1,5 @@
+[mysqld]
+expire_logs_days        = 3
+max_binlog_size         = 100M
+log_bin                 = /var/log/mysql-bin/mysql-bin.log
+binlog_format           = MIXED
