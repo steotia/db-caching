@@ -1,0 +1,45 @@
+version: '2'
+services:
+  mysql:
+    build: mysql/.
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=maxwell
+      - MYSQL_PASSWORD=maxwell
+    ports:
+      - "3306:3306"
+    volumes_from:
+      - mysql-bin
+    depends_on:
+      - mysql-bin
+    container_name: my-mysql
+  maxwell:
+    build: maxwell/.
+    environment:
+      - VERSION=1.1.1
+      - MYSQL_USERNAME=maxwell
+      - MYSQL_PASSWORD=maxwell
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+    depends_on:
+      - mysql
+      - kafka
+    container_name: my-maxwell
+  mysql-bin:
+    build: mysql/.
+    command: 'chown 999:999 /var/log/mysql-bin'
+    volumes:
+      - /var/log/mysql-bin
+    container_name: my-mysql-bin
+  kafka:
+    image: spotify/kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      - ADVERTISED_HOST=192.168.99.100
+      - ADVERTISED_PORT=9092
+    container_name: my-kafka
+  app:
+    image: busybox
+
